@@ -1,43 +1,33 @@
-# Magento 2 Module WolfSellers Enable Disable 2FA
+# Enable/Disable Two-Factor Auth for Magento 2 (SISL fork)
 
- - [Main Functionalities](#markdown-header-main-functionalities)
- - [Installation](#markdown-header-installation)
- - [Tested](#markdown-header-tested)
-    
+Adds an admin configuration switch to turn Magento 2's mandatory Two-Factor Authentication
+on or off. Magento forces 2FA on every admin login, which is correct for production but a
+constant friction on **staging, dev and CI environments** where a shared admin has no phone
+to enrol. This module lets you disable it there — from config, without hacking core or
+juggling `bin/magento security:tfa:*` commands.
 
-## Main Functionalities
+Maintained fork of `wolfsellers/module-enabledisabletfa`, verified on **Magento 2.4.9 / PHP 8.4**.
 
-Adds enable disable feature switch for the Two-factor Authorization for Magento 2.4 
+## What changed vs upstream
 
-It can be configured in `Stores > Configuration > 2FA > General > Enabled` by default is set to no, so the admin can be used.
-Change it back in production.
+- Added `require` to composer.json (`php` 8.1–8.5, `magento/framework >=103.0.4 <104`); the
+  original declared neither, so Composer would install it on any incompatible version silently.
+- Relaxed the `magento/module-two-factor-auth` constraint from `1.*` (which blocked newer
+  Magento) to work with the version shipped in 2.4.9. Removed `minimum-stability: dev`.
 
-## Installation
+> Use it on non-production environments. Leave 2FA enabled in production.
 
-### 1. Composer (recommended)
+## Install
 
- - Install the module composer by running `composer require wolfsellers/module-enabledisabletfa`
- - Enable the module by running `php bin/magento module:enable WolfSellers_EnableDisableTfa`
- - Apply database updates by running `php bin/magento setup:upgrade`
- - Flush the cache by running `php bin/magento cache:flush`
-
-### 2. Download zip (not recommended)
-
- - Download the zip file from github
- - Extract the files in `app/code/WolfSellers/EnableDisableTfa/`
- - Enable the module by running `php bin/magento module:enable WolfSellers_EnableDisableTfa`
- - Apply database updates by running `php bin/magento setup:upgrade`
- - Flush the cache by running `php bin/magento cache:flush`
-
-## Tested
-
-Tested in Magento 2.4.0, versions:
- - Community
- - Enterprise
- - Cloud 
-
-## Toggling through CLI
-
-```sh
-php bin/magento config:set twofactorauth/general/enabled 1 # or 0
+```bash
+composer config repositories.tfa vcs https://github.com/SISL-source/module-enabledisabletfa
+composer require wolfsellers/module-enabledisabletfa:dev-main
+bin/magento module:enable WolfSellers_EnableDisableTfa
+bin/magento setup:upgrade
 ```
+
+Then toggle it under *Stores → Configuration → Security → 2FA* (admin scope).
+
+## License
+
+MIT (upstream). Maintained by [SISL](https://sisl.pl).
