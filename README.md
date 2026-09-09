@@ -17,6 +17,8 @@ Maintained fork of `wolfsellers/module-enabledisabletfa`, verified on **Magento 
 
 > Use it on non-production environments. Leave 2FA enabled in production.
 
+- **Safe default:** upstream shipped the config default as disabled, so installing the module turned OFF mandatory 2FA out of the box. This fork defaults to enabled=1 — 2FA stays enforced until you deliberately turn it off, so installing it never silently drops 2FA in production.
+
 ## Install
 
 ```bash
